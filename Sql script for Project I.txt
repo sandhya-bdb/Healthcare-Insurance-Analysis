@@ -1,0 +1,111 @@
+-- Sql script for Project 1
+
+USE project__1_hospital;
+
+-- Task 1 
+-- a) Merge the two tables by first identifying the columns in the 
+-- data tables that will help you in merging 
+CREATE TABLE MergedData AS
+SELECT H.*, M.BMI, M.HBA1C, M.`Heart Issues`, M.`Any Transplants`, M.`Cancer history`, M.`NumberOfMajorSurgeries`, M.smoker
+FROM project__1_hospital.`hospitalisation details` AS H
+JOIN project__1_hospital.`medical examinations` AS M ON H.`Customer ID` = M.`Customer ID`;
+SELECT * FROM MergedData;
+
+-- Task 1 
+-- b)  In both tables, add a Primary Key constraint for these columns
+
+ALTER TABLE MergedData
+ADD PRIMARY KEY (`Customer ID`(255));
+
+-- Hidden task clear null and missing value from merged data
+
+CREATE TABLE MergedData_cleaned AS
+SELECT *
+FROM MergedData
+WHERE `Customer ID` IS NOT NULL
+AND `Customer ID` <> ''
+AND `year` IS NOT NULL
+AND `month` IS NOT NULL
+AND `date` IS NOT NULL
+AND `charges` IS NOT NULL
+AND `Hospital tier` IS NOT NULL
+AND `City tier` IS NOT NULL
+AND `State ID` IS NOT NULL
+AND BMI IS NOT NULL
+AND HBA1C IS NOT NULL
+AND `Heart Issues` IS NOT NULL
+AND `Any Transplants` IS NOT NULL
+AND `Cancer history` IS NOT NULL
+AND NumberOfMajorSurgeries IS NOT NULL
+AND smoker IS NOT NULL;
+
+SELECT * FROM MergedData_cleaned;
+
+-- hidden task calculate age from year, month and date
+
+ALTER TABLE MergedData_cleaned
+ADD COLUMN Age INT;
+
+
+SET SQL_SAFE_UPDATES = 0;
+
+UPDATE MergedData_cleaned
+SET Age = YEAR(CURRENT_DATE) - year - 
+          CASE 
+            WHEN MONTH(CURRENT_DATE) < month 
+            OR (MONTH(CURRENT_DATE) = month AND DAY(CURRENT_DATE) < date) THEN 1 
+            ELSE 0 
+          END;
+
+SET SQL_SAFE_UPDATES = 1;
+
+SELECT * FROM MergedData_cleaned;
+
+
+-- Task 2  Retrieve information about people who are diabetic and have heart problems with their average 
+-- age, the average number of dependent children, average BMI, and average hospitalization costs
+
+SELECT AVG(Age) AS Average_Age,
+       AVG(Children) AS Average_Children,
+       AVG(BMI) AS Average_BMI,
+       AVG(Charges) AS Average_Charges
+FROM MergedData_cleaned
+WHERE HBA1C > 6 AND `Heart Issues` = 0;
+
+-- Task 3 Find the average hospitalization cost for each hospital tier and each city level
+
+SELECT `Hospital tier`, `City tier`, AVG(Charges) AS Average_Charges
+FROM MergedData_cleaned
+GROUP BY `Hospital tier`, `City tier`;
+
+-- task 4 Determine the number of people who have had major surgery with a history of cancer
+
+SELECT COUNT(*) AS NumberOfPeople
+FROM MergedData_cleaned
+WHERE NumberOfMajorSurgeries = 1 AND `Cancer history` = 'Yes';
+
+-- Task 5 
+
+SELECT `State ID`, COUNT(*) AS NumberOfTier1Hospitals
+FROM MergedData_cleaned
+WHERE `Hospital tier` = 'tier - 1'
+GROUP BY `State ID`;
+
+-- Homework line. please ignore
+
+SELECT COUNT(*) FROM MergedData_cleaned WHERE NumberOfMajorSurgeries > 1;
+SELECT COUNT(*) FROM MergedData_cleaned WHERE `Cancer history` = 'Yes';
+
+SELECT DISTINCT `Hospital tier` FROM MergedData_cleaned;
+
+SELECT DISTINCT `State ID` FROM MergedData_cleaned;
+
+DESCRIBE MergedData_cleaned;
+
+SELECT COUNT(*) FROM MergedData_cleaned;
+
+SELECT COUNT(*) FROM MergedData_cleaned WHERE `Hospital tier` = 'tier - 1';
+
+
+
+
