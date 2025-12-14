@@ -2,9 +2,9 @@
 
 ## Project Overview
 
-This repository contains a data science and machine learning project focused on **predicting patients’ healthcare/hospitalization costs** and **identifying the key factors contributing to cost variation**. The goal is to support healthcare institutions, insurance providers, and analysts in cost estimation, decision-making, and strategic planning.
+This repository contains a data science and machine learning project focused on **predicting patients’ healthcare/hospitalization costs** and **identifying key factors contributing to cost variation**. The goal is to support healthcare institutions, insurance companies, and analysts with cost estimation, decision-making, and strategic planning.
 
-The project follows a structured approach to data cleaning, exploratory analysis, visualization, hypothesis testing, model development, evaluation, and results communication.
+The project follows a structured workflow involving data cleaning, exploratory analysis, visualization, statistical hypothesis testing, machine learning, SQL analytics, and interactive storytelling.
 
 ---
 
@@ -22,36 +22,38 @@ The project follows a structured approach to data cleaning, exploratory analysis
 - [Tools & Technologies](#tools--technologies)  
 - [Results](#results)  
 - [Future Work](#future-work)  
-- [License](#license)
+- [Contributing](#contributing)  
+- [Acknowledgments](#acknowledgments)  
+
 
 ---
 
 ## Business Scenario
 
 **Problem Statement:**  
-Rising healthcare costs are a significant public health concern. Predicting future costs and understanding their drivers is crucial for healthcare providers and insurance companies to make informed decisions.
+Rising healthcare costs are a significant public health concern. Predicting future hospitalization costs and understanding their causes is critical for effective resource planning and management.
 
 **Objective:**  
-- Predict hospitalization costs for patients.
-- Identify significant variables influencing costs.
-- Analyze interdependencies among healthcare, demographic, and behavioral features.
-- Apply data science and machine learning techniques to derive actionable insights.
+- Predict hospitalization costs for patients.  
+- Identify significant factors that contribute to cost variation.  
+- Understand relationships between demographic, clinical, and behavioral predictors.  
+- Apply data science and machine learning methodologies to a real-world case.
 
 ---
 
 ## Dataset Description
 
-The project uses multiple linked data tables that describe patient demographics, clinical indicators, medical history, hospitalization details, and costs.
+The project uses linked datasets describing patient demographics, medical examinations, hospitalization details, and outcomes.
 
 ### Included Data Files
 
-| File | Description |
-|------|-------------|
-| `Hospitalization_details.xlsx` | Contains patient IDs, service dates, hospitalization charges, hospital and city tiers, state IDs, etc. |
-| `Medical_Examinations.xlsx` | Contains BMI, HbA1c, heart issues, transplant history, major surgeries, smoking status, etc. |
-| `Names.xlsx` | Contains patient IDs and full names (used to derive gender). |
+| Filename | Description |
+|----------|-------------|
+| `data/Hospitalisation_details.csv` | Hospitalization charge records with patient demographics and tier information. |
+| `data/Medical_Examinations.csv` | Medical measures including BMI, HbA1c, and clinical history. |
+| `data/Names.xlsx` | Patient names and salutations (used to derive gender). |
 
-The `Customer ID` field is used as the primary key for merging datasets.
+Datasets are merged on the `Customer ID` primary key to form a unified analytical dataset.
 
 ---
 
@@ -59,30 +61,29 @@ The `Customer ID` field is used as the primary key for merging datasets.
 
 ### Week 1: Data Preparation & Exploration
 
-1. **Collate Data:**  
-   Merge related tables by `Customer ID` to build a unified dataset.
+1. **Data Integration:**  
+   Consolidate all raw data files into a single analytical dataset.
 
 2. **Data Cleaning:**  
-   - Detect and handle missing values.
-   - Remove trivial value rows (e.g., `?`).
-   - Transform categorical variables (nominal and ordinal).
-   - Create dummy variables for key state IDs (R1011, R1012, R1013).
-   - Clean irregular fields like `NumberOfMajorSurgeries`.
+   - Detect and handle missing and trivial values (e.g., `?`).  
+   - Standardize and transform categorical variables.  
+   - Create dummy variables for key state IDs (R1011, R1012, R1013).  
+   - Clean and reformat fields such as `NumberOfMajorSurgeries`.
 
 3. **Feature Engineering:**  
-   - Compute patient age from date of birth.
-   - Extract gender from salutations in the names dataset.
+   - Calculate patient age from date of birth.  
+   - Extract gender from salutations in names.
 
 4. **Exploratory Data Analysis (EDA):**  
-   - Visualize distribution of hospitalization costs (histogram, box plots, swarm plots).
-   - Compare distributions across gender and hospital tier.
-   - Radar chart describing median cost by hospital tier.
-   - Stacked bar and frequency charts showing counts by city and hospital tiers.
+   - Histograms, box plots, and swarm plots for cost distribution.  
+   - Comparisons across gender and hospital tiers.  
+   - Radar charts showing median costs by tier.  
+   - Frequency and stacked bar charts for city and hospital tiers.
 
 5. **Hypothesis Testing:**  
-   - Test whether average hospitalization costs differ across hospital tiers.
-   - Test whether average costs differ across city tiers.
-   - Test whether costs differ between smokers and non-smokers.
+   - Test differences in average costs across hospital tiers.  
+   - Test differences across city tiers.  
+   - Compare costs for smokers vs. non-smokers.  
    - Test independence between smoking and heart issues.
 
 ---
@@ -92,61 +93,73 @@ The `Customer ID` field is used as the primary key for merging datasets.
 #### Machine Learning
 
 1. **Correlation Analysis:**  
-   Generate a heatmap to identify highly correlated predictors.
+   Check predictor correlations and visualize with a heatmap.
 
 2. **Model Development:**  
-   - Build regression models (Linear, Ridge).
-   - Apply stratified 5-fold cross validation.
-   - Standardize features and optimize hyperparameters.
-   - Use sklearn pipelines for workflow automation.
-   - Integrate regularization to mitigate bias-variance trade-off.
+   - Train Linear and Ridge regression models.  
+   - Apply stratified 5-fold cross validation.  
+   - Standardize features; tune hyperparameters.  
+   - Use sklearn pipelines for workflow automation.  
+   - Address bias-variance trade-off using regularization techniques.
 
-3. **Gradient Boosting:**  
-   - Train a Gradient Boost model.
-   - Identify variable importance and eliminate redundant features.
+3. **Gradient Boost Model:**  
+   - Build Gradient Boosting model.  
+   - Extract feature importance and identify redundant variables.
 
 4. **Case Scenario Prediction:**  
-   Estimate the hospitalization cost for a specific patient profile using the best model.
+   Estimate hospitalization cost for a given patient profile using the best model.
 
-#### SQL Analysis
+#### SQL Analytics
 
-1. Create database schema and enforce primary keys.
-2. Run analytical SQL queries to:
-   - Identify diabetic patients with heart conditions and compute average statistics.
-   - Calculate average cost by hospital and city tier.
-   - Count patients with major surgery and cancer history.
-   - Count tier-1 hospitals by state.
+1. Construct database schema and enforce primary keys.  
+2. Run SQL queries to:
+   - Retrieve diabetic patients with heart issues and compute average age, BMI, and cost.  
+   - Calculate average cost by hospital and city tier.  
+   - Count patients with major surgeries and cancer history.  
+   - Find the number of tier-1 hospitals per state.
 
 ---
 
 ### Week 2: Dashboard & Storytelling
 
-Create a Tableau dashboard that highlights:
-- Cost drivers and comparative metrics.
-- Hospital tier performance.
-- Visual summaries of statistical tests and model predictions.
+Create a **Tableau dashboard** highlighting:
 
-Emphasis should be on clear data storytelling for stakeholders.
+- Key cost drivers and trends  
+- Visual summaries of clinical and demographic impacts  
+- Comparative insights across groups
+
+Focus on **effective storytelling** for stakeholders.
 
 ---
 
 ## Key Features
 
-- End-to-end data cleaning and preprocessing
-- Comprehensive EDA with advanced visualizations
-- Hypothesis testing with statistical rigor
-- Regression and machine learning models
-- SQL analytics and database integration
-- Interactive dashboards for stakeholder insights
+- Robust data cleaning and preprocessing  
+- Comprehensive exploratory analysis with visualizations  
+- Statistical hypothesis testing  
+- Regression and machine learning models  
+- SQL analytics for business questions  
+- Interactive Tableau dashboard  
 
 ---
 
 ## Usage Instructions
 
-1. Clone this repository.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/<your_username>/Healthcare-Insurance-Analysis.git
+   cd Healthcare-Insurance-Analysis
+
 2. Install required packages using:
    ```bash
    pip install -r requirements.txt
+   
+### Getting Started
+
+- [ ] Place dataset files in the `data/` directory
+- [ ] Run notebooks in the `notebooks/` folder (start with `capstone1.ipynb`)
+- [ ] Review analytical queries in the `sql/` directory
+- [ ] Explore dashboard visuals in the `images/` folder
 
 ## Tools & Technologies
 
@@ -211,10 +224,7 @@ Special thanks to:
 
 ---
 
-## License
 
-This project is released under the **MIT License**.  
-See the `LICENSE` file in this repository for full details.
 
 
 
